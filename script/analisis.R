@@ -65,6 +65,19 @@ Sys.setlocale("LC_TIME", "Spanish")
 #    3.4. Desviación estandar
 #    3.5. Otro
 
+base_ventas <- read_csv(file = "data/ventas_comercio.txt")
+
+
+base_ventas <- base_ventas %>% 
+  mutate(ventas_totales = ventas_12 + ventas_0,
+         ventas_gravadas_0 = ventas_0/ventas_totales,
+         ventas_gravadas_12 = ventas_12/ventas_totales) %>% 
+  group_by(anio_fiscal) %>% 
+  summarise(v_promedio = mean(ventas_totales),v_totales = sum(ventas_totales), v_medianas = median(ventas_totales), v_desv = sd(ventas_totales))
+
+
+
+
 
 # Objetos: ts() para series de tiempo -------------------------------------
 
