@@ -9,6 +9,7 @@ library(tidyverse)
 library(lubridate)
 library(tsibble)
 library(openxlsx)
+library(readxl)
 
 
 # Lectura de datos --------------------------------------------------------
@@ -17,6 +18,13 @@ library(openxlsx)
 
 raw_data <- read_csv(file = "data/Base NO procesada ciuu de Comercio.csv")
 
+ciiu <- read_excel("data/CIIU SRI Luis sin punto.xls",skip = 1)
+
+ciiu <- ciiu %>% 
+  select(ciiu = CODIGO,
+         descripcion = DESCRIPCIÓN...2) %>% 
+  filter(str_count(ciiu) == 7)
+  
 
 # Preprocesamiento --------------------------------------------------------
 
@@ -38,6 +46,13 @@ diccionario <- tibble(etiquetas = names(raw_data),
 print(diccionario)
 
 # Renombrado:
+
+# Cuando tienes una función:
+
+raw_data %>% 
+  rename_with(.fn = str_to_title)
+
+# Cuando tienes un vector:
 
 raw_data <- raw_data %>% 
   rename_with(.fn = ~ nombres_limpios)
@@ -97,11 +112,13 @@ print(new_var)
 # Procesada para power BI 
 
 reporte_1 <- raw_data %>% 
+  inner_join(y = unique(ciiu),
+             by = c("actividad_economica" = "ciiu")) %>% 
   select(`ANIO FISCAL` = anio_fiscal,
          `MES FISCAL` = mes_fiscal,
          `Tipo de Contribuyente` = tipo_contribuyente,
          `CIIU 1` = familia,
-         `Actividad` = actividad_economica,
+         `Actividad` = descripcion,
          `VENTAS TOTALES` = ventas_totales,
          `Ventas 12%` = ventas_12,
          `Ventas 0%` = ventas_0,
@@ -110,21 +127,48 @@ reporte_1 <- raw_data %>%
          `Fecha` = fecha) 
 
 
-write.xlsx(x = reporte_1,
-           file = "data/procesada_power_bi.xlsx",
-           asTable = TRUE,
-           overwrite = T) 
+# write.xlsx(x = reporte_1,
+#            file = "data/procesada_power_bi.xlsx",
+#            asTable = TRUE,
+#            overwrite = T) 
+# 
 
+# Salida de datos para el taller: -----------------------------------------
+
+
+tabla_taller <- raw_data %>% 
+  inner_join(y = unique(ciiu),
+             by = c("actividad_economica" = "ciiu")) %>% 
+  select(anio_fiscal,
+         mes_fiscal,
+         actividad_economica,
+         descripcion,
+         ventas_0,
+         ventas_12) 
+
+
+tabla_taller %>% 
+  write_csv(file = "data/ventas_comercio.txt")
+
+tibble(
+  variable = names(tabla_taller),
+  descripcion = c("Año fiscal",
+                  "Mes fiscal",
+                  "Código CIIU a 6 digitos",
+                  "Descripción de la actividad económica",
+                  "Ventas gravadas con el 0% de IVA",
+                  "Ventas gravadas con el 12% de IVA"))%>% 
+  write_csv(file = "data/diccionario_ventas_comercio.txt")
 
 
 # Para el taller:
-
-raw_data %>% 
-  select(anio_fiscal,
-         mes_fiscal,
-         ventas_totales,
-         sactividad_economica)
-  write_csv(x = )
+# 
+# raw_data %>% 
+#   select(anio_fiscal,
+#          mes_fiscal,
+#          ventas_totales,
+#          sactividad_economica)
+#   write_csv(x = )
 
 
 # Si yo les muestro esta gráfica: 
