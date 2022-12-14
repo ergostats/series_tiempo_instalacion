@@ -1,0 +1,171 @@
+---
+title: "Proyección de las ventas 2023"
+author: "Centro de Investigación Estadística ERGOSTATS"
+format: revealjs
+editor: visual
+---
+
+## Bienvenidos 🖖
+
+⏲️ El taller va a tener una duración de 45 minutos
+
+🪐 Repositorio con el material de este taller:
+
+<https://github.com/ergostats/series_tiempo_ccq>
+
+> Tambien tienes una copia del repositorio en la carpeta compartida de OneDrive
+
+Ya que estás por ahí puedes dejarnos tu ⭐
+
+Si necesitas ayuda levanta tu mano (interacciones de Zoom) 🖐️
+
+## Algunas reglas generales
+
+-   ❔ No dudes en preguntar, la forma más chevere de aprender es en conjunto
+
+-   👨‍💻 Si no tienes computador no te preocupes, el taller quedará gravado y lo podrás seguir en casa.
+
+-   📹 Para acceder al material audiovisual. Envianos un correo a:
+
+    -   Alex Bajaña instructor del taller ([alexvbr\@ergostats.org](https://ergostats.github.io/series_tiempo_ccq/alexvbr@ergostats.org) )
+
+    -   Fernando Arevalo organizador ([fdarevalo\@lacamaradequito.com](https://ergostats.github.io/series_tiempo_ccq/fdarevalo@lacamaradequito.com))
+
+## Alex Bajaña
+
+::: columns
+::: {.column width="50%"}
+![](img/alex_photo.jpg)
+:::
+
+::: {.column width="50%"}
+-   Tengo 30 años
+
+-   7 de experiencia
+
+-   Actualmente soy investigador para el Banco Mundial y fundador del Centro de Inestigación Estadística ERGOSTATS
+
+-   Twitter: \@AlexBajaa5
+
+-   Correo: alexvbr\@ergostats.org
+:::
+:::
+
+## Agenda
+
+|               |                                                                      |
+|------------------------------------|------------------------------------|
+| 18:00 - 18:10 | Introducción y presentación del taller, los datos y las herramientas |
+| 18:11 - 18:20 | Análisis exploratorio y formatos de fecha                            |
+| 18:21 - 18:30 | Análisis gráfico con {tsibble}                                       |
+| 18:31 - 18:45 | Pornósticos con {fabble}                                             |
+
+: Las preguntas se responderan a lo largo del taller
+
+## Recursos
+
+::: columns
+::: {.column width="50%"}
+### Libros
+
+-   [R para ciencia de datos, Hadley Wickham (versión en español)](https://es.r4ds.hadley.nz/)
+
+-   [Forcasting: Principles and practice 3rd Edition, Rob Hyndman y George Athanasopoulus](https://otexts.com/fpp3/)
+
+-   [Tidy time series forecasting with fable, by tidyverts](https://tidyverts.github.io/tidy-forecasting-principles/index.html)
+:::
+
+::: {.column width="50%"}
+### Librerias de R:
+
+-   [tsibble](https://tsibble.tidyverts.org/)
+
+-   [fable](https://fable.tidyverts.org/)
+
+-   [lubridate](https://lubridate.tidyverse.org/)
+
+-   [tidyverse](https://www.tidyverse.org/)
+:::
+:::
+
+## El flujo de trabajo `tidy`
+
+![](images/paste-A51C3D77.png)
+
+## `tidy` series de tiempo
+
+![](images/paste-DE5C879A.png)
+
+## Ambiente de trabajo
+
+Esta presentación se realizó con la versión de R:
+
+```{r}
+
+R.version
+```
+
+> Para este taller necesitamos cualquier versión desde la R 4.2.0
+
+## Ambiente de trabajo
+
+Librerías:
+
+```{r echo=TRUE}
+
+# Para manejar las tablas
+
+library(tidyverse)
+
+# Para manejar las fechas: 
+library(lubridate)
+
+# Herramientas para manejar series de tiempo:
+library(tsibble)
+
+# Herramientas para pronóstico:
+library(fable)
+
+```
+
+# Nuestros datos:
+
+Para el desarrollo de nuestro taller hemos hecho uso de la herramienta [SAIKU-SRI](https://srienlinea.sri.gob.ec/saiku-ui/) con las siguientes consideraciones:
+
+-   Cubo de declaraciónes 104
+
+-   Variables categóricas:
+
+    -   Año y mes fiscal
+
+    -   Tipo de contribuyente (Determina si son ventas privadas o de otros contribuyentes)
+
+    -   Calsificación de actividad económica CIIU a 6 dígitos
+
+## Nuestros datos: (cont.)
+
+-   Variables númericas
+
+    -   Rubros de ventas locales y de activos fijos gravadas con el 12% de IVA
+
+    -   Rubros de ventas locales y de activos fijos con derecho y sin derecho a crédito tributario gravadas con 0% de IVA
+
+-   Filtramos los datos para el sector de comercio (Familia de actividades G)
+
+-   Periodo de análisis: 2011-2022
+
+-   Descarga en formato `.csv`
+
+## Pre-procesamiento:
+
+Descargados estos datos realizamos algunas transformaciones y se generó un diccionario. Los datos y diccionario los encontrarás en la carpeta `data/`.
+
+Transformaciones:
+
+-   Agrupación de las ventas gravadas con 12% y 0%
+
+-   Calculo de las ventas totales
+
+-   Inclusión de la descripción de las actividades económicas
+
+# Ahora vamos a la interfaz de RStudio para empezar nuestro análisis
