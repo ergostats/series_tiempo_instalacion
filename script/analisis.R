@@ -24,7 +24,7 @@ base_ventas <- read_csv(file = "data/ventas_comercio.txt")
 
 # Diccionario:
 
-diccionario_df <- read_csv("data/diccionario_ventas_comercio.txt")
+diccionario_df <- read_csv(_______)
 
 
 # Transformación a objeto de tipo date: -----------------------------------
@@ -41,7 +41,7 @@ dmy("1/1/2021")
 
 # Extraer partes de una fecha:
 
-fechas <- ymd(c("20120101","20150407","20180909"))
+fechas <- _______(c("20120101","20150407","20180909"))
 
 month(fechas,label = TRUE,abbr = FALSE)
 
@@ -53,29 +53,27 @@ quarter(fechas,type = "year.quarter")
 
 # Solución cuando tienes en ingles, solo para windows:
 
-Sys.setlocale("LC_TIME", "Spanish")
+____________ # Verificar con Sys.getlocale()
 
 
 # Transformamos a tsibble() -----------------------------------------------
 
 base_ventas <- base_ventas %>% 
   mutate(fecha = str_c(anio_fiscal,mes_fiscal,"01",sep = "-"),
-         fecha = ymd(fecha))
+         fecha = _____(fecha))
 
 
 # Establecemos la key (identificador) y el index (varaible de fecha) ------
 
 
 base_ventas <- base_ventas %>% 
-  as_tsibble(index = fecha,
-             key = c(tipo_contribuyente,actividad_economica))
+  as_tsibble(index = _______,
+             key = ________)
 
 # Proporción de ventas gravadas y desgravadas sobre el total de ventas
 
 base_ventas <- base_ventas %>% 
-  mutate(ventas_totales = ventas_12 + ventas_0,
-         porcentaje_0 = ventas_0/ventas_totales,
-         porcentaje_12 = ventas_12/ventas_totales) 
+  mutate(ventas_totales = ________) 
 
 # Un tsibble conserva su forma de tibble!
 
@@ -85,26 +83,26 @@ resumen_preliminar <- base_ventas %>%
   index_by(anio_fiscal) %>% 
   group_by(tipo_contribuyente) %>% 
   summarise(ventas_promedio = mean(ventas_totales),
-            ventas_totales = sum(ventas_totales), 
-            ventas_medianas = median(ventas_totales), 
-            sd_ventas = sd(ventas_totales))
+            ventas_totales = _____(ventas_totales), 
+            ventas_medianas = median(______), 
+            sd_ventas = ______(ventas_totales))
 
 # Primer gráfico
 
-autoplot(resumen_preliminar,
-         ventas_totales)
+autoplot(________,
+         ________)
 
 # Vamos a ir modificando nuestro gráfico ----------------------------------
 
 trimestrales <- base_ventas %>% 
   mutate(trimestre = yearquarter(fecha,fiscal_start = 1)) %>% 
-  index_by(trimestre) %>% 
-  summarise(ventas_totales = sum(ventas_totales))
+  index_by(_______) %>% 
+  summarise(ventas_totales = sum(________))
 
 # Generación de series trimestrales
 
 autoplot(trimestrales,
-         ventas_totales)
+         _______)
 
 
 # Identificación de la tendencia estacional -------------------------------
@@ -112,53 +110,53 @@ autoplot(trimestrales,
 
 # Tendencia trimestral:
 
-gg_season(trimestrales,ventas_totales)
+gg_season(_______,________)
 
 # Mensuales:
 
 mensual_ventas_gravadas <- base_ventas %>% 
-  mutate(meses = tsibble::yearmonth(fecha)) %>% 
+  mutate(meses = ___________(fecha)) %>% 
   index_by(meses)  %>% 
   summarise(ventas_totales = sum(ventas_totales))
 
 
 # Verificar que tengamos todos los datos:
 
-tsibble::has_gaps(mensual_ventas_gravadas)
+tsibble::has_gaps(_________)
 
-tsibble::scan_gaps(mensual_ventas_gravadas)
+tsibble::scan_gaps(_________)
 
-tsibble::fill_gaps(mensual_ventas_gravadas)
+tsibble::fill_gaps(_________)
 
 # Veamos nuevamente la estacionalidad:
 
-gg_season(data = mensual_ventas_gravadas,
-          y = ventas_totales)
+gg_season(data = ___________,
+          ___________)
 
 
 # Comparación interanual -------------------------------------------------------------
 
 trimestrales <- base_ventas %>% 
-  mutate(trimestre = yearquarter(fecha,fiscal_start = 1)) %>% 
+  mutate(trimestre = __________(fecha,_______ = 1)) %>% 
   index_by(trimestre) %>% 
-  group_by(tipo_contribuyente) %>% 
+  _________(tipo_contribuyente) %>% 
   summarise(ventas_totales = sum(ventas_totales))
 
 # Gráfico:
 
-gg_subseries(trimestrales,y = ventas_totales)
+gg_subseries(_______,_________)
 
 
 
 # Relación del presente con el pasado -----------------------------------
 
 
-gg_lag(data = trimestrales,y = ventas_totales,geom = "point")
+gg_lag(data = trimestrales,y = ________,geom = _______)
 
 # Función de autocorrelación temporal:
 
 mensual_ventas_gravadas %>% 
-  ACF() %>% 
+  ______() %>% 
   autoplot()
 
 
@@ -174,24 +172,22 @@ trimestrales <- trimestrales %>%
 # Modelo 1: Super simple, usamos la media
 
 prediccion <- trimestrales %>% 
-  model(MEAN(ventas_totales)) %>% 
-  forecast(h = "6 months") 
+  model(______(ventas_totales)) %>% 
+  _______(h = "6 months") 
 
 # Gráfico del primer modelo:
 
 prediccion %>% 
   autoplot(trimestrales) %>% +
   geom_line(aes(y = mean(ventas_totales)), colour = "#0072B2", linetype = "dashed") + 
-  geom_line(data = prediccion,
-            aes(x = trimestre,y = .mean),
-            colour = "#0072B2", linetype = "solid")
+  geom_line(_________)
 
-# Modelo 2: Usamos la función seasonal NAIVE
+# Modelo 2: Usamos la función seasonal SNAIVE
 
 trimestrales %>% 
-  model(SNAIVE(ventas_totales ~ lag("6 months") + lag("year"))) %>% 
+  model(________(ventas_totales ~ lag("6 months") + lag("year"))) %>% 
   forecast(h = "6 months") %>% 
-  autoplot(trimestrales) +
+  autoplot(_______) +
   geom_point(data = slice(trimestrales,
                           (n()-6):n()), 
              aes(y=ventas_totales), colour = "#0072B2")
@@ -202,7 +198,7 @@ trimestrales %>%
 # Filtramos para los datos que tenemos:
 
 mensual_completo <- mensual_ventas_gravadas %>% 
-  filter(meses <= make_yearmonth(year = 2022,month = 8)) 
+  filter(meses <= ______(____ = 2022,_____ = 8)) 
 
 # Modelo 3: Time series linear model
 
@@ -223,11 +219,11 @@ modelo_ts %>%
 # * Otros componentes
 
 modelo_tsl <- mensual_completo %>% 
-  model(modelo_con_tendencia = STL(formula = ventas_totales ~ season(window = Inf)))
+  ________(modelo_con_tendencia = ______(formula = ventas_totales ~ season(window = Inf)))
 
 # Extraemos la tendencia
 
-tendencia <- components(modelo_tsl) %>% 
+tendencia <- ______(modelo_tsl) %>% 
   select(meses,trend)
 
 # Dibujamos la serie nuevamente:
@@ -235,4 +231,4 @@ tendencia <- components(modelo_tsl) %>%
 modelo_ts %>% 
   forecast(h = "6 months")  %>%  
   autoplot(mensual_completo) +
-  geom_line(data = tendencia,aes(meses,trend),color = "red")
+  geom_line(________)
