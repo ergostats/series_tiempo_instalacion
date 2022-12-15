@@ -1,8 +1,14 @@
 ---
 title: "Proyección de las ventas 2023"
 author: "Centro de Investigación Estadística ERGOSTATS"
-format: revealjs
+date: "Diciembre 15, 2022"
+format: 
+  revealjs:
+    css: scss/theme_ergostats.css
 editor: visual
+title-slide-attributes: 
+  data-background-image: scss/grafismo.png
+  data-background-size: 100%
 ---
 
 ## Bienvenidos 🖖
@@ -54,7 +60,7 @@ Si necesitas ayuda levanta tu mano (interacciones de Zoom) 🖐️
 ## Agenda
 
 |               |                                                                      |
-|------------------------------------|------------------------------------|
+|------------------|------------------------------------------------------|
 | 18:00 - 18:10 | Introducción y presentación del taller, los datos y las herramientas |
 | 18:11 - 18:20 | Análisis exploratorio y formatos de fecha                            |
 | 18:21 - 18:30 | Análisis gráfico con {tsibble}                                       |
@@ -62,7 +68,7 @@ Si necesitas ayuda levanta tu mano (interacciones de Zoom) 🖐️
 
 : Las preguntas se responderan a lo largo del taller
 
-## Recursos
+## Recursos 📖
 
 ::: columns
 ::: {.column width="50%"}
@@ -96,7 +102,7 @@ Si necesitas ayuda levanta tu mano (interacciones de Zoom) 🖐️
 
 ![](images/paste-DE5C879A.png)
 
-## Ambiente de trabajo
+## Ambiente de trabajo 🖥️
 
 Esta presentación se realizó con la versión de R:
 
@@ -128,7 +134,7 @@ library(fable)
 
 ```
 
-# Nuestros datos:
+# Nuestros datos: 🗄️
 
 Para el desarrollo de nuestro taller hemos hecho uso de la herramienta [SAIKU-SRI](https://srienlinea.sri.gob.ec/saiku-ui/) con las siguientes consideraciones:
 
@@ -142,7 +148,7 @@ Para el desarrollo de nuestro taller hemos hecho uso de la herramienta [SAIKU-SR
 
     -   Calsificación de actividad económica CIIU a 6 dígitos
 
-## Nuestros datos: (cont.)
+## Nuestros datos: (cont.) 🗄️
 
 -   Variables númericas
 
@@ -156,7 +162,7 @@ Para el desarrollo de nuestro taller hemos hecho uso de la herramienta [SAIKU-SR
 
 -   Descarga en formato `.csv`
 
-## Pre-procesamiento:
+## Pre-procesamiento: ⚠️
 
 Descargados estos datos realizamos algunas transformaciones y se generó un diccionario. Los datos y diccionario los encontrarás en la carpeta `data/`.
 
