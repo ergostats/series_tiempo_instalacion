@@ -478,6 +478,7 @@
 <li><p><a href="https://fable.tidyverts.org/">fable</a></p></li>
 <li><p><a href="https://lubridate.tidyverse.org/">lubridate</a></p></li>
 <li><p><a href="https://www.tidyverse.org/">tidyverse</a></p></li>
+<li><p><a href="https://cran.r-project.org/web/packages/feasts/index.html">feasts</a></p></li>
 </ul>
 </div>
 </div>
@@ -532,7 +533,10 @@ nickname       Innocent and Trusting            </code></pre>
 <span id="cb2-9"><a href="#cb2-9"></a><span class="fu">library</span>(tsibble)</span>
 <span id="cb2-10"><a href="#cb2-10"></a></span>
 <span id="cb2-11"><a href="#cb2-11"></a><span class="co"># Herramientas para pronóstico:</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="fu">library</span>(fable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="fu">library</span>(fable)</span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co"># Herramientas para extraer carácteristicas de las series de tiempo:</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="fu">library</span>(feasts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section>
@@ -571,13 +575,71 @@ nickname       Innocent and Trusting            </code></pre>
 <li><p>Calculo de las ventas totales</p></li>
 <li><p>Inclusión de la descripción de las actividades económicas</p></li>
 </ul>
-</section></section>
-<section id="ahora-vamos-a-la-interfaz-de-rstudio-para-empezar-nuestro-análisis" class="title-slide slide level1 center">
-<h1>Ahora vamos a la interfaz de RStudio para empezar nuestro análisis</h1>
-<div class="footer footer-default">
+</section>
+<section id="como-vamos-a-trabajar" class="slide level2">
+<h2>¿Como vamos a trabajar?</h2>
 
+<img data-src="images/paste-27FE02A1.png" class="r-stretch"><blockquote>
+<p>¿Te es familar este diagrama?</p>
+</blockquote>
+</section>
+<section id="algunos-conceptos-de-las-series-de-tiempo" class="slide level2">
+<h2>Algunos conceptos de las series de tiempo:</h2>
+<h3 id="tendencia">Tendencia 📈</h3>
+<p>Una tendencia existe cuando hay un aumento o disminución a largo plazo en los datos. No tiene que ser lineal. A veces nos referiremos a una tendencia como “cambio de dirección”, cuando podría pasar de una tendencia creciente a una tendencia decreciente.</p>
+</section>
+<section id="algunos-conceptos-de-las-series-de-tiempo-1" class="slide level2">
+<h2>Algunos conceptos de las series de tiempo:</h2>
+<h3 id="tendencia-estacional">Tendencia estacional 📅</h3>
+<p>Un patrón estacional ocurre cuando una serie de tiempo se ve afectada por factores estacionales como la época del año o el día de la semana. La estacionalidad es siempre de un período fijo y conocido. (Junio y diciembre son los meses de repunte en el gráfico mensual)</p>
+</section>
+<section id="algunos-conceptos-de-las-series-de-tiempo-2" class="slide level2">
+<h2>Algunos conceptos de las series de tiempo:</h2>
+<h3 id="cíclo">Cíclo ⏲️</h3>
+<p>Un ciclo ocurre cuando los datos exhiben subidas y bajadas que no tienen una frecuencia fija. Estas fluctuaciones generalmente se deben a las condiciones económicas y, a menudo, están relacionadas con el “ciclo económico”. La duración de estas fluctuaciones suele ser de al menos 2 años.</p>
+<blockquote>
+<p>Para extraer los componentes de una serie de tiempo usamos <code>components()</code></p>
+</blockquote>
+</section>
+<section id="autocorrelación" class="slide level2">
+<h2>Autocorrelación 👶🧓</h2>
+<p>Nos ayuda a identificar patrones estacionales:</p>
+
+<img data-src="images/paste-E675B25B.png" class="r-stretch"><blockquote>
+<p>Para calcular la función de autocorrelación usamos <code>ACF()</code></p>
+</blockquote>
+</section>
+<section id="métodos-sencillos-de-estimación" class="slide level2">
+<h2>Métodos sencillos de estimación 💯</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="media">Media</h3>
+<p><img data-src="images/paste-718C18FF.png"></p>
+<section id="naive-el-ingenuo" class="slide level2">
+<h2>Naive (el ingenuo)</h2>
+<p><img data-src="images/paste-B5D71D01.png"></p>
+</section>
+</div><div class="column" style="width:50%;">
+<h3 id="naive-estacional">Naive estacional</h3>
+<p><img data-src="images/paste-3A0F36DC.png"></p>
+<h3 id="regresión-lineal-para-series-de-tiempo">Regresión lineal para series de tiempo</h3>
+<p><img data-src="images/paste-E8CB8092.png"></p>
+</div>
 </div>
 </section>
+<section id="agradecimientos" class="slide level2">
+<h2>Agradecimientos ⛑️</h2>
+<ul>
+<li><p>Primero que a nadie a todos los presentes por haberse unido a este taller</p></li>
+<li><p>A la Cámara de Comercio de Quito por la organización y difusión</p></li>
+<li><p>A quienes hacemos ERGOSTATS por el material</p></li>
+<li><p>Por último y no menos importante, a la comunidad de R que nos provee de estas fantásticas librerias</p></li>
+</ul>
+
+<img src="scss/logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
+
+</div>
+</section></section>
     </div>
   </div>
 
@@ -630,7 +692,7 @@ nickname       Innocent and Trusting            </code></pre>
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',

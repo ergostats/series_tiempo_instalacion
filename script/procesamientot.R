@@ -141,6 +141,7 @@ tabla_taller <- raw_data %>%
              by = c("actividad_economica" = "ciiu")) %>% 
   select(anio_fiscal,
          mes_fiscal,
+         tipo_contribuyente,
          actividad_economica,
          descripcion,
          ventas_0,

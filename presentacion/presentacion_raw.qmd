@@ -5,6 +5,8 @@ date: "Diciembre 15, 2022"
 format: 
   revealjs:
     css: scss/theme_ergostats.css
+    slide-number: true
+    logo: scss/logo.png
 editor: visual
 title-slide-attributes: 
   data-background-image: scss/grafismo.png
@@ -91,6 +93,8 @@ Si necesitas ayuda levanta tu mano (interacciones de Zoom) 🖐️
 -   [lubridate](https://lubridate.tidyverse.org/)
 
 -   [tidyverse](https://www.tidyverse.org/)
+
+-   [feasts](https://cran.r-project.org/web/packages/feasts/index.html)
 :::
 :::
 
@@ -131,6 +135,9 @@ library(tsibble)
 
 # Herramientas para pronóstico:
 library(fable)
+
+# Herramientas para extraer carácteristicas de las series de tiempo:
+library(feasts)
 
 ```
 
@@ -174,4 +181,70 @@ Transformaciones:
 
 -   Inclusión de la descripción de las actividades económicas
 
-# Ahora vamos a la interfaz de RStudio para empezar nuestro análisis
+## ¿Como vamos a trabajar?
+
+![](images/paste-27FE02A1.png)
+
+> ¿Te es familar este diagrama?
+
+## Algunos conceptos de las series de tiempo:
+
+### Tendencia 📈
+
+Una tendencia existe cuando hay un aumento o disminución a largo plazo en los datos. No tiene que ser lineal. A veces nos referiremos a una tendencia como "cambio de dirección", cuando podría pasar de una tendencia creciente a una tendencia decreciente.
+
+## Algunos conceptos de las series de tiempo:
+
+### Tendencia estacional 📅
+
+Un patrón estacional ocurre cuando una serie de tiempo se ve afectada por factores estacionales como la época del año o el día de la semana. La estacionalidad es siempre de un período fijo y conocido. (Junio y diciembre son los meses de repunte en el gráfico mensual)
+
+## Algunos conceptos de las series de tiempo:
+
+### Cíclo ⏲️
+
+Un ciclo ocurre cuando los datos exhiben subidas y bajadas que no tienen una frecuencia fija. Estas fluctuaciones generalmente se deben a las condiciones económicas y, a menudo, están relacionadas con el "ciclo económico". La duración de estas fluctuaciones suele ser de al menos 2 años.
+
+> Para extraer los componentes de una serie de tiempo usamos `components()`
+
+## Autocorrelación 👶🧓
+
+Nos ayuda a identificar patrones estacionales:
+
+![](images/paste-E675B25B.png)
+
+> Para calcular la función de autocorrelación usamos `ACF()`
+
+## Métodos sencillos de estimación 💯
+
+::: columns
+::: {.column width="50%"}
+### Media
+
+![](images/paste-718C18FF.png)
+
+## Naive (el ingenuo)
+
+![](images/paste-B5D71D01.png)
+:::
+
+::: {.column width="50%"}
+### Naive estacional
+
+![](images/paste-3A0F36DC.png)
+
+### Regresión lineal para series de tiempo
+
+![](images/paste-E8CB8092.png)
+:::
+:::
+
+## Agradecimientos ⛑️
+
+-   Primero que a nadie a todos los presentes por haberse unido a este taller
+
+-   A la Cámara de Comercio de Quito por la organización y difusión
+
+-   A quienes hacemos ERGOSTATS por el material
+
+-   Por último y no menos importante, a la comunidad de R que nos provee de estas fantásticas librerias
